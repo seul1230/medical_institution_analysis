@@ -90,50 +90,14 @@ with row1_1:
     )
 
 
-# Select Hypothesis
-row2_spacer1, row2_1, row2_spacer2 = st.columns((0.1, 3.2, 0.1))
-with row2_1:
-    hypo = st.selectbox(
-        "Select Hypothesis 👇",
-        [
-            "가설 1 : 총 인구수 - 의료기관 수",
-            "가설 2 : 고령화 비율 - 의료기관 수",
-            "가설 3 : 인구수 - 의료기관 개폐업",
-            "가설 4 : 기본 인프라 - 의료기관 수",
-            "가설 5 : 미용 목적 의료기관 비율"
-        ]
-    )
-
-
-# Import Data
-file_dict = {
-    "가설 1 : 총 인구수 - 의료기관 수": "df_now_hos",
-    "가설 2 : 고령화 비율 - 의료기관 수": "mise_health",
-    "가설 3 : 인구수 - 의료기관 개폐업": "misemise_china",
-    "가설 4 : 기본 인프라 - 의료기관 수": "misemise_korea",
-    "가설 5 : 미용 목적 의료기관 비율": "misemise_weather"
-}
-
-
 @st.cache
 def get_hypo_data(hypo_name):
-    file_name = f"data/{file_dict[hypo_name]}.csv"
+    file_name = f"data/{hypo_name}.csv"
     data = pd.read_csv(file_name)
     return data
 
 
-st.markdown('***')
-
-# Display Hypothesis
-line1_spacer1, line1_1, line1_spacer2 = st.columns((0.01, 3.2, 0.01))
-
-
-with line1_1:
-    st.subheader("**{}**".format(hypo))
-
-# Load Data
-data_medical = pd.read_csv('data/medical_department.csv')
-data = get_hypo_data(hypo)
+data = get_hypo_data('연령별_인구현황(2008_2021)')
 
 
 # Display Data Set
@@ -144,8 +108,6 @@ row3_space1, row3_1, row3_space2 = st.columns(
 with row3_1, _lock:
     st.subheader("DataSet")
     with st.expander("DataSet 보기 👉"):
-        st.markdown('**의료기관 데이터**')
-        st.dataframe(data_medical)
         st.markdown('**미니프로젝트_전국총인구수**')
         st.dataframe(data)
 
@@ -155,27 +117,6 @@ st.markdown(
     '''
 )
 
-# Data Visualization
-row4_space1, row4_1, row4_space2 = st.columns(
-    (0.01, 1, 0.01)
-)
-
-with row4_1, _lock:
-    st.subheader("Data Visualization")
-    fig, ax = plt.subplots(figsize=(25, 5))
-    sns.countplot(
-        data=data_medical, x='시도명',
-        order=data_medical.loc[data_medical['현황'] == 1, '시도명'].value_counts(
-        ).sort_values(ascending=False).index
-    )
-
-    ax.set_title("전국 의료기관 현황")
-    st.pyplot(fig)
-
-    fig, ax = plt.subplots(figsize=(25, 5))
-    sns.lineplot(data=data.sort_values(
-        '의료기관수', ascending=False), x="시도명", y="총인구수")
-    st.pyplot(fig)
 
 # Footers
 footer_space1, footer_1, footer_space2 = st.columns(
