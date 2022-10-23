@@ -88,7 +88,7 @@ def get_hypo_data(hypo_name):
 data = get_hypo_data('df_seoul_final')
 
 data_seoul_pdata = data.set_index('시군구명')
-subway = get_hypo_data('subway').drop('Unnamed: 0', axis=1)
+subway = get_hypo_data('subway')
 
 seoul_subway = subway[subway['시도명'] == '서울특별시']
 
