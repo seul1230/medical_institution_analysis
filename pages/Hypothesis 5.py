@@ -38,7 +38,7 @@ st_lottie(lottie_json, speed=1, height=300, key="initial")
 # geo_info
 geo_str_korea = json.load(open('data/korea.json'))
 geo_str_gg = json.load(open('data/gg.json'))
-
+geo_str_seoul = json.load(open('data/seoul.json'))
 
 # Preparation to display plot
 # matplotlib.use("agg")
@@ -67,6 +67,7 @@ def get_hypo_data(hypo_name):
 
 data = get_hypo_data('df_now_hos')
 df_oc_gg = get_hypo_data('df_gg_final')
+df_oc_seoul = get_hypo_data('df_seoul_final')
 
 # Display Data Set
 row3_space1, row3_1, row3_space2 = st.columns(
@@ -161,6 +162,68 @@ with analysis_1, _lock:
                 `인구수 순위` 화성시, 남양주시, 부천
                 ''')
     st.markdown('')
+    st.markdown('')
+    st.markdown('')
+
+# Folium_population
+map1_space1, map1_1, map1_space2, map1_2, map1_space3 = st.columns(
+    (0.01, 1, 0.05, 1, 0.01)
+)
+
+data_sigun = df_oc_seoul.set_index('시군구명')
+
+with map1_1, _lock:
+    st.markdown('🙆‍♀️ **서울 행정시별 개업지도 (2000년 이후)**')
+    map_seoul_open = folium.Map(location=[37.5665, 127], zoom_start=10)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=data_sigun["개업"],
+                                   columns=[data_sigun.index,
+                                            data_sigun["개업"]],
+                                   fill_opacity=0.8,
+                                   line_opacity=0.8,
+                                   fill_color="PuRd", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_open)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_seoul_open, width=400, height=400)
+
+
+with map1_2, _lock:
+    st.markdown('🙅‍♀️ **서울 행정시별 폐업지도 (2000년 이후)**')
+    map_seoul_close = folium.Map(location=[37.5665, 127], zoom_start=10)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=data_sigun["폐업"],
+                                   columns=[data_sigun.index,
+                                            data_sigun["폐업"]],
+                                   fill_opacity=0.8,
+                                   line_opacity=0.8,
+                                   fill_color="PuBuGn", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_close)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_seoul_close, width=400, height=400)
 
 
 # Folium_population
