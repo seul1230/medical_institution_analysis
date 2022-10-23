@@ -147,19 +147,22 @@ with visual_1, _lock:
     st.subheader("Data Visualization")
 
     st.markdown('''
-                👴🏻 **노년층 비율 순위에 따른 의룍관 수 (서울, 경기 제외)**
+                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (전국)**
                 ''')
     st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    data.plot.bar(x="시도명", y="의료기관수",
+                  figsize=(20, 5), rot=0)
+    st.pyplot()
+
+    st.markdown('''
+                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
+                ''')
+
     # fig, ax = plt.subplots(figsize=(25, 5))
     pop_hos_now.plot.bar(x="시도명", y="의료기관수",
                          figsize=(20, 5), rot=0)
     st.pyplot()
-
-    # sns.lineplot(data=data.sort_values(
-    #     '의료기관수', ascending=False), x="시도명", y="총인구수")
-
-    # ax.set_title("행정구역별 총 인구 수")
-    # st.pyplot(fig)
 
 
 st.markdown('''
@@ -248,12 +251,14 @@ st.markdown('''
             ***
             ''')
 
+
 # Further Analysis
 more_spacer1, more_1, more_spacer2 = st.columns((0.01, 1, 0.01))
 
 with more_1, _lock:
     st.subheader('Further Analysis')
     st.image(Image.open('img/mz_medical_corr.png'))
+    st.markdown('')
     st.markdown(
         '''
         상관 계수를 구했을 때, 청년 비율과 의료기관 수의 상관관계가 **0.53** 정도로
@@ -264,34 +269,35 @@ with more_1, _lock:
         '''
         '''
     )
-    st.markdown(
-        '''
-        
-        🔎 
-        
-        '''
-    )
-    st.markdown(
-        '''
-        '''
-    )
-    st.markdown(
-        '''
-        ??
-        '''
-    )
 
+    st.markdown('''
+                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (전국)**
+                ''')
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    data.plot.bar(x="시도명", y="의료기관수",
+                  figsize=(20, 5), rot=0)
+    st.pyplot()
+    st.markdown(
+        '''
+        '''
+    )
+    st.markdown('''
+                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
+                ''')
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    pop_hos_now.plot.bar(x="시도명", y="의료기관수",
+                         figsize=(20, 5), rot=0)
+    st.pyplot()
 
-st.markdown('''
-            ***
-            ''')
 
 # Map Visualization
 m1_space1, m1_1, m1_space2 = st.columns(
     (0.01, 1, 0.01)
 )
-with m1_1, _lock:
-    st.subheader("Map Visualization")
+# with m1_1, _lock:
+# st.subheader("Map Visualization")
 
 # Folium_population
 map2_space1, map2_1, map2_space2, map2_2, map2_space3 = st.columns(
@@ -364,10 +370,20 @@ with map2_2, _lock:
 
 further_spacer1, further_1, further_spacer2 = st.columns((0.01, 1, 0.01))
 with further_1, _lock:
-    st.markdown('''
-                → 
 
-                ''')
+    st.subheader('**Conclusion**')
+    st.markdown(
+        '''
+        
+        시각화를 해보니 서울, 경기도의 청년 비율이 높아 연령대별 상관관계 중에 가장 높은 것으로 추정한다. 
+        그러나 경제인구가 밀집된 서울, 경기 지역의 데이터를 제외하고 보면 **청년 연령층과의 상관계수도 유의미하지 않다**고 판단하였다.
+        
+        '''
+    )
+    st.markdown(
+        '''
+        '''
+    )
 
 
 # Footers
