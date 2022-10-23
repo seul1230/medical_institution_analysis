@@ -104,8 +104,8 @@ with analysis_1, _lock:
 
     st.markdown('''
                 **⭕️ 행정구역의 총인구수와 의료기관수는 양의 상관관계가 있다.**
-                
-                → 행정구역의 총인구수와 의료기관 수는 0.96 양의 상관관계를 가지기 때문에 
+
+                → 행정구역의 총인구수와 의료기관 수는 0.96 양의 상관관계를 가지기 때문에
                 총인구수가 많을수록 의료 인프라가 잘 마련되어 있다고 볼 수 있다.
                 ''')
     st.image(Image.open('img/df_pop_med_corr.png'))
@@ -119,7 +119,7 @@ visual_space1, visual_1, visual_space2 = st.columns(
     (0.01, 1, 0.01)
 )
 
-with analysis_1, _lock:
+with visual_1, _lock:
     st.subheader("Data Visualization")
 
     st.markdown('''
@@ -145,11 +145,23 @@ with analysis_1, _lock:
         '의료기관수', ascending=False), x="시도명", y="의료기관수")
     ax.set_title("행정구역별 의료기관 수")
     st.pyplot(fig)
+st.markdown('''
+            ***
+            ''')
+st.subheader("Map Visualization")
 
-    # Folium_medical
-    data_sido = data.set_index('시도명')
-    map_medical = folium.Map(
-        location=[37.5536067, 126.9674308], zoom_start=6.3)
+# Folium_population
+map_space1, map_1, map_space2, map_2, map_space3 = st.columns(
+    (0.01, 1, 0.05, 1, 0.01)
+)
+
+data_sido = data.set_index('시도명')
+
+with map_1, _lock:
+    st.markdown('행정구역별 총 인구 수 현황')
+
+    map_pop = folium.Map(
+        location=[36.5861, 127], zoom_start=6)
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
                                    data=data_sido['총인구수'],
                                    columns=[data_sido.index,
@@ -160,34 +172,6 @@ with analysis_1, _lock:
                                    #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
                                    #                                                          labels=True,
                                    #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_medical)
-
-    choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
-                                       labels=True,
-                                       localize=True,
-                                       sticky=False,
-                                       style="""
-                                    background-color: #F0EFEF;
-                                    border: 2px solid black;
-                                    border-radius: 3px;
-                                    box-shadow: 3px;
-                                    """)
-    )
-    st_folium(map_medical, width=500, height=500)
-
-    # Folium_medical
-    # data_sido = data.set_index('시도명')
-    map_pop = folium.Map(
-        location=[37.5536067, 126.9674308], zoom_start=6.3)
-    choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['의료기관수'],
-                                   columns=[data_sido.index,
-                                            data_sido['의료기관수']],
-                                   fill_color='PuRd',
-                                   fill_opacity=0.7,
-                                   line_opacity=0.5,
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_pop)
 
     choropleth.geojson.add_child(
@@ -203,7 +187,37 @@ with analysis_1, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_pop, width=500, height=500)
+    st_folium(map_pop, width=400, height=400)
+
+
+with map_2, _lock:
+
+    st.markdown('행정구역별 의료기관 수 현황')
+    map_medical = folium.Map(
+        location=[36.5861, 127], zoom_start=6)
+    choropleth = folium.Choropleth(geo_data=geo_str_korea,
+                                   data=data_sido['의료기관수'],
+                                   columns=[data_sido.index,
+                                            data_sido['의료기관수']],
+                                   fill_color='PuRd',
+                                   fill_opacity=0.7,
+                                   line_opacity=0.5,
+                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_medical)
+
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
+                                       aliases=['CTP_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_medical, width=400, height=400)
 
 
 # Footers
