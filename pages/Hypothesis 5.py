@@ -174,6 +174,14 @@ data_sigun = df_oc_seoul.set_index('시군구명')
 
 with map1_1, _lock:
     st.markdown('🙆‍♀️ **서울 행정시별 개업지도 (2000년 이후)**')
+
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        opened = np.around(df_oc_seoul.loc[df_oc_seoul['시군구명']
+                                           == sigun_id, '개업'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>2000년 이후 개업 수 : {opened} 개'
+        geo_str_seoul['features'][idx]['properties']['open'] = txt
+
     map_seoul_open = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -184,8 +192,8 @@ with map1_1, _lock:
                                    line_opacity=0.8,
                                    fill_color="PuRd", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_open)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['open'],
+                                       aliases=['open'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -201,6 +209,14 @@ with map1_1, _lock:
 
 with map1_2, _lock:
     st.markdown('🙅‍♀️ **서울 행정시별 폐업지도 (2000년 이후)**')
+
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        close = np.around(df_oc_seoul.loc[df_oc_seoul['시군구명']
+                                          == sigun_id, '폐업'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>2000년 이후 폐업 수 : {close} 개'
+        geo_str_seoul['features'][idx]['properties']['close'] = txt
+
     map_seoul_close = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -211,8 +227,8 @@ with map1_2, _lock:
                                    line_opacity=0.8,
                                    fill_color="PuBuGn", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_close)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['close'],
+                                       aliases=['close'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -236,6 +252,14 @@ data_sigun = df_oc_gg.set_index('시군구명')
 
 with map_1, _lock:
     st.markdown('🙆‍♀️ **경기도 행정시별 개업지도 (2000년 이후)**')
+
+    for idx, sigun_dict in enumerate(geo_str_gg['features']):
+        sigun_id = sigun_dict['properties']['name']
+        ratio = np.around(df_oc_gg.loc[df_oc_gg['시군구명']
+                                       == sigun_id, '개업'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>2000년 이후 개업 수 : {ratio} 개'
+        geo_str_gg['features'][idx]['properties']['open'] = txt
+
     map_gg_open = folium.Map(location=[37.5665, 127], zoom_start=8)
 
     choropleth = folium.Choropleth(geo_data=geo_str_gg,
@@ -246,8 +270,8 @@ with map_1, _lock:
                                    line_opacity=0.8,
                                    fill_color="PuRd", key_on='feature.properties.name').add_to(map_gg_open)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['name'],
-                                       aliases=['name'],
+        folium.features.GeoJsonTooltip(fields=['open'],
+                                       aliases=['open'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -261,6 +285,14 @@ with map_1, _lock:
     st_folium(map_gg_open, width=400, height=400)
 with map_2, _lock:
     st.markdown('🙅‍♀️ **경기도 행정시별 폐업지도 (2000년 이후)**')
+
+    for idx, sigun_dict in enumerate(geo_str_gg['features']):
+        sigun_id = sigun_dict['properties']['name']
+        close = np.around(df_oc_gg.loc[df_oc_gg['시군구명']
+                                       == sigun_id, '폐업'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>2000년 이후 폐업 수 : {close} 개'
+        geo_str_gg['features'][idx]['properties']['close'] = txt
+
     map_gg_close = folium.Map(location=[37.5665, 127], zoom_start=8)
 
     choropleth = folium.Choropleth(geo_data=geo_str_gg,
@@ -271,8 +303,8 @@ with map_2, _lock:
                                    line_opacity=0.8,
                                    fill_color="Greens", key_on='feature.properties.name').add_to(map_gg_close)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['name'],
-                                       aliases=['name'],
+        folium.features.GeoJsonTooltip(fields=['close'],
+                                       aliases=['close'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,

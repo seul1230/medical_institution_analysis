@@ -170,6 +170,12 @@ data_sido = data.set_index('시도명')
 with map_1, _lock:
     st.markdown('👥 **행정구역별 총 인구 수 현황**')
 
+    for idx, sigun_dict in enumerate(geo_str_korea['features']):
+        sigun_id = sigun_dict['properties']['CTP_KOR_NM']
+        pop = int(data.loc[data['시도명'] == sigun_id, '총인구수'].iloc[0])
+        txt = f'<b><h4>{sigun_id}</h4></b>총인구수 : {pop} 명'
+        geo_str_korea['features'][idx]['properties']['population'] = txt
+
     map_pop = folium.Map(
         location=[36.5861, 127], zoom_start=6)
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
@@ -179,14 +185,11 @@ with map_1, _lock:
                                    fill_color='PuRd',
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
-                                   #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=False,
-                                   #                                                          sticky=False),
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_pop)
 
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['population'],
+                                       aliases=['population'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -203,6 +206,13 @@ with map_1, _lock:
 with map_2, _lock:
 
     st.markdown('🏥 **행정구역별 의료기관 수 현황**')
+
+    for idx, sigun_dict in enumerate(geo_str_korea['features']):
+        sigun_id = sigun_dict['properties']['CTP_KOR_NM']
+        medical = data.loc[data['시도명'] == sigun_id, '의료기관수'].iloc[0]
+        txt = f'<b><h4>{sigun_id}</h4></b>의료기관 수 : {medical} 개'
+        geo_str_korea['features'][idx]['properties']['medical'] = txt
+
     map_medical = folium.Map(
         location=[36.5861, 127], zoom_start=6)
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
@@ -215,8 +225,8 @@ with map_2, _lock:
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_medical)
 
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['medical'],
+                                       aliases=['medical'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -298,8 +308,8 @@ with map2_1, _lock:
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_medical_1)
 
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['medical'],
+                                       aliases=['medical'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -316,6 +326,13 @@ with map2_1, _lock:
 with map2_2, _lock:
 
     st.markdown('🔍 **인구 1만 명 당 의료기관 수 현황**')
+
+    for idx, sigun_dict in enumerate(geo_str_korea['features']):
+        sigun_id = sigun_dict['properties']['CTP_KOR_NM']
+        medical = np.around(
+            data.loc[data['시도명'] == sigun_id, '1만명당의료기관수'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>1만 명당 의료기관 수 : {medical} 개'
+        geo_str_korea['features'][idx]['properties']['medical_10000'] = txt
 
     # 행정구역별 인구 1만 명 당 의료기관 수
     map_10000_medical = folium.Map(
@@ -334,8 +351,8 @@ with map2_2, _lock:
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_10000_medical)
 
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['medical_10000'],
+                                       aliases=['medical_10000'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,

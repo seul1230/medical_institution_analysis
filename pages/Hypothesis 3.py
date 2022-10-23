@@ -147,6 +147,12 @@ map_space1, map_1, map_space2, map_2, map_space3 = st.columns(
 with map_1, _lock:
     st.markdown('👥 **서울특별시 인구 수 현황**')
 
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        pop = data.loc[data['시군구명'] == sigun_id, '인구수'].iloc[0]
+        txt = f'<b><h4>{sigun_id}</h4></b>총 인구 수 : {pop} 명'
+        geo_str_seoul['features'][idx]['properties']['population'] = txt
+
     map_seoul_population = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -155,8 +161,8 @@ with map_1, _lock:
                                             data_seoul_pdata["인구수"]],
                                    fill_color="PuRd", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_population)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['population'],
+                                       aliases=['population'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -173,6 +179,13 @@ with map_1, _lock:
 with map_2, _lock:
 
     st.markdown('🏥 **서울특별시 의료기관 수 현황**')
+
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        medical = data.loc[data['시군구명'] == sigun_id, '인구수'].iloc[0]
+        txt = f'<b><h4>{sigun_id}</h4></b>의료기관 수 : {medical} 개'
+        geo_str_seoul['features'][idx]['properties']['medical'] = txt
+
     map_seoul_medical = folium.Map(
         location=[37.5665, 127], zoom_start=10)
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -185,8 +198,8 @@ with map_2, _lock:
                                    key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_medical)
 
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['medical'],
+                                       aliases=['medical'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -205,11 +218,19 @@ map2_space1, map2_1, map2_space2, map2_2, map2_space3 = st.columns(
     (0.1, 1, 0.05, 1, 0.1)
 )
 
-
+# seoul_subway
 with map2_1, _lock:
     df_seoul_subway = seoul_subway.set_index("시군구명")
 
     st.markdown('🚆 **서울특별시 지하철역 개수**')
+
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        subway = seoul_subway.loc[seoul_subway['시군구명']
+                                  == sigun_id, '역 개수'].iloc[0]
+        txt = f'<b><h4>{sigun_id}</h4></b>지하철역 개수 : {subway} 개'
+        geo_str_seoul['features'][idx]['properties']['subway'] = txt
+
     map_seoul_subway = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -218,8 +239,8 @@ with map2_1, _lock:
                                             df_seoul_subway["역 개수"]],
                                    fill_color="Purples", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_subway)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['subway'],
+                                       aliases=['subway'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -236,6 +257,14 @@ with map2_1, _lock:
 with map2_2, _lock:
 
     st.markdown('🏥 **서울특별시 인구 1만 명 당 의료기관 수 현황**')
+
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        med_10000 = np.around(data.loc[data['시군구명']
+                                       == sigun_id, '만명당_요양기관_수'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>1만 명당 의료기관 수 : {med_10000} 개'
+        geo_str_seoul['features'][idx]['properties']['med_10000'] = txt
+
     map_seoul_10000 = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -244,8 +273,8 @@ with map2_2, _lock:
                                             data_seoul_pdata["인구수"]],
                                    fill_color="Purples", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_10000)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['med_10000'],
+                                       aliases=['med_10000'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,

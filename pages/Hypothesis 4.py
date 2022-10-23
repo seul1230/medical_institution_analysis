@@ -128,13 +128,23 @@ a_space1, a_1, a_space2, a_2, a_space3 = st.columns(
     (0.01, 1, 0.05, 1, 0.01)
 )
 with a_1, _lock:
-
+    st.markdown('**시군구별 성형외과 비율 TOP5**')
+    st.markdown('')
+    st.markdown('')
     st.image(Image.open('img/beauty_pie.png'), width=300)  # mz_medical_corr
     st.markdown('')
 with a_2, _lock:
 
     df_c = df_cosmetics.set_index('시도명')
 
+    for idx, sigun_dict in enumerate(geo_str_korea['features']):
+        sigun_id = sigun_dict['properties']['CTP_KOR_NM']
+        dep_ratio = np.around(df_cosmetics.loc[df_cosmetics['시도명']
+                                               == sigun_id, '요양종별비율(%)'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>성형외과 비율 : {dep_ratio} %'
+        geo_str_korea['features'][idx]['properties']['dep_ratio'] = txt
+
+    st.markdown('**전국 성형외과 비율**')
     map_cosmetics = folium.Map(
         location=[36.8, 127.5], zoom_start=5.5)
 
@@ -148,8 +158,8 @@ with a_2, _lock:
                                    key_on='feature.properties.CTP_KOR_NM',
                                    legend_name='요양종별비율(%)').add_to(map_cosmetics)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['dep_ratio'],
+                                       aliases=['dep_ratio'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -195,6 +205,13 @@ data_sigun = data.set_index('시군구명')
 with map_1, _lock:
     st.markdown('💄 **서울 미용목적 의료기관 비율**')
 
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        beauty_ratio = np.around(data.loc[data['시군구명']
+                                          == sigun_id, '미용목적_병원_비율'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>미용 목적 의료기관 비율 : {beauty_ratio} %'
+        geo_str_seoul['features'][idx]['properties']['beauty_ratio'] = txt
+
     map_seoul_beauty = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -205,8 +222,8 @@ with map_1, _lock:
                                    line_opacity=0.8,
                                    fill_color="Blues", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_beauty)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['beauty_ratio'],
+                                       aliases=['beauty_ratio'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -224,6 +241,14 @@ with map_2, _lock:
 
     st.markdown('🩺 **서울 필수 목적 의료기관 비율**')
 
+    for idx, sigun_dict in enumerate(geo_str_seoul['features']):
+        sigun_id = sigun_dict['properties']['SIG_KOR_NM']
+        non_beauty_ratio = np.around(data.loc[data['시군구명']
+                                              == sigun_id, '비미용목적_병원_비율'].iloc[0], 2)
+
+        txt = f'<b><h4>{sigun_id}</h4></b>필수 의료 목적 의료기관 비율 : {non_beauty_ratio} %'
+        geo_str_seoul['features'][idx]['properties']['non_beauty_ratio'] = txt
+
     map_seoul_non_beauty = folium.Map(location=[37.5665, 127], zoom_start=10)
 
     choropleth = folium.Choropleth(geo_data=geo_str_seoul,
@@ -234,8 +259,8 @@ with map_2, _lock:
                                    line_opacity=0.8,
                                    fill_color="Blues", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_non_beauty)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
-                                       aliases=['SIG_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['non_beauty_ratio'],
+                                       aliases=['non_beauty_ratio'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -261,6 +286,13 @@ data_gg_sigun = data_gg.set_index('시군구명')
 with map2_1, _lock:
     st.markdown('💄 **경기도 미용목적 의료기관 비율**')
 
+    for idx, sigun_dict in enumerate(geo_str_gg['features']):
+        sigun_id = sigun_dict['properties']['name']
+        beauty_ratio = np.around(data_gg.loc[data_gg['시군구명']
+                                             == sigun_id, '미용목적_병원_비율'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>미용 목적 의료기관 비율 : {beauty_ratio} %'
+        geo_str_gg['features'][idx]['properties']['beauty_ratio'] = txt
+
     map_gg_beauty = folium.Map(location=[37.5665, 127], zoom_start=8)
 
     choropleth = folium.Choropleth(geo_data=geo_str_gg,
@@ -271,8 +303,8 @@ with map2_1, _lock:
                                    line_opacity=0.8,
                                    fill_color="PuBuGn", key_on='feature.properties.name').add_to(map_gg_beauty)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['name'],
-                                       aliases=['name'],
+        folium.features.GeoJsonTooltip(fields=['beauty_ratio'],
+                                       aliases=['beauty_ratio'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
@@ -290,6 +322,13 @@ with map2_2, _lock:
 
     st.markdown('🩺 **경기도 필수 목적 의료기관 비율**')
 
+    for idx, sigun_dict in enumerate(geo_str_gg['features']):
+        sigun_id = sigun_dict['properties']['name']
+        non_beauty_ratio = np.around(data_gg.loc[data_gg['시군구명']
+                                                 == sigun_id, '비미용목적_병원_비율'].iloc[0], 2)
+        txt = f'<b><h4>{sigun_id}</h4></b>필수 의료 목적 의료기관 비율 : {non_beauty_ratio} %'
+        geo_str_gg['features'][idx]['properties']['non_beauty_ratio'] = txt
+
     map_gg_non_beauty = folium.Map(location=[37.5665, 127], zoom_start=8)
 
     choropleth = folium.Choropleth(geo_data=geo_str_gg,
@@ -300,8 +339,8 @@ with map2_2, _lock:
                                    line_opacity=0.8,
                                    fill_color="PuBuGn", key_on='feature.properties.name').add_to(map_gg_non_beauty)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['name'],
-                                       aliases=['name'],
+        folium.features.GeoJsonTooltip(fields=['non_beauty_ratio'],
+                                       aliases=['non_beauty_ratio'],
                                        labels=False,
                                        localize=True,
                                        sticky=False,
