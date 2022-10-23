@@ -98,7 +98,7 @@ def get_hypo_data(hypo_name):
 
 
 # data = get_hypo_data('연령별_인구현황(2008_2021)')
-data = pd.read_csv('data/연령별_인구현황(2008_2021).csv')
+data = pd.read_csv('data/age_population(2008_2021).csv')
 
 
 # Display Data Set
