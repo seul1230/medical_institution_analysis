@@ -37,6 +37,8 @@ st_lottie(lottie_json, speed=1, height=300, key="initial")
 
 # geo_info
 geo_str_korea = json.load(open('data/korea.json'))
+geo_str_gg = json.load(open('data/gg.json'))
+
 
 # Preparation to display plot
 # matplotlib.use("agg")
@@ -98,7 +100,7 @@ def get_hypo_data(hypo_name):
 
 
 data = get_hypo_data('df_now_hos')
-
+df_oc_gg = get_hypo_data('df_gg_final')
 
 # Display Data Set
 row3_space1, row3_1, row3_space2 = st.columns(
@@ -191,6 +193,92 @@ with analysis_1, _lock:
                 `현재 의료기관 순위` 남양주시, 성남시 분당구, 화성시, 평택시
 
                 `인구수 순위` 화성시, 남양주시, 부천
+                ''')
+    st.markdown('')
+
+
+# Folium_population
+map_space1, map_1, map_space2, map_2, map_space3 = st.columns(
+    (0.01, 1, 0.05, 1, 0.01)
+)
+
+
+data_sigun = df_oc_gg.set_index('시군구명')
+
+with map_1, _lock:
+    st.markdown('🙆‍♀️ **경기도 행정시별 개업지도 (2000년 이후)**')
+    map_gg_open = folium.Map(location=[37.5665, 127], zoom_start=8)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_gg,
+                                   data=data_sigun["개업"],
+                                   columns=[data_sigun.index,
+                                            data_sigun["개업"]],
+                                   fill_opacity=0.8,
+                                   line_opacity=0.8,
+                                   fill_color="PuRd", key_on='feature.properties.name').add_to(map_gg_open)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['name'],
+                                       aliases=['name'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_gg_open, width=400, height=400)
+with map_2, _lock:
+    st.markdown('🙅‍♀️ **경기도 행정시별 폐업지도 (2000년 이후)**')
+    map_gg_close = folium.Map(location=[37.5665, 127], zoom_start=8)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_gg,
+                                   data=data_sigun["폐업"],
+                                   columns=[data_sigun.index,
+                                            data_sigun["폐업"]],
+                                   fill_opacity=0.8,
+                                   line_opacity=0.8,
+                                   fill_color="Greens", key_on='feature.properties.name').add_to(map_gg_close)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['name'],
+                                       aliases=['name'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_gg_close, width=400, height=400)
+
+
+# Hypothesis Verification
+a_space1, a_1, a_space2 = st.columns(
+    (0.01, 1, 0.01)
+)
+
+with a_1, _lock:
+    # st.subheader("Hypothesis Verification")
+
+    st.markdown('')
+    st.markdown('')
+    st.markdown('''
+                **❗️ 2000년도 이후 서울특별시는 의료기관 개업 대비 높은 폐업률을 보이고, 
+                경기도는 낮은 폐업률을 보인다.**
+                ''')
+    # st.image(Image.open('img/open_close.png'))
+    st.markdown('''
+                → 의료기관의 개업과 폐업의 비율은 총인구수를 따라가는 것은 아니다.
+
+                → 2000년 이후, 서울은 폐업이 개업에 비해 많은 편인데, 
+                경기도는 폐업이 개업에 비해 적다. 
+                이는 서울의 밀집화로 인한 의료기관간의 경쟁의 영향으로 보인다. 
+                나머지 행정구역에서는 대체적으로 폐업이 높은 것으로 나타나고 있다.
                 ''')
 
 
