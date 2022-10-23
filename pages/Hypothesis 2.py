@@ -14,7 +14,7 @@ from PIL import Image
 import json
 
 st.set_page_config(
-    page_title="Hypothesis 2 : Ages ratio - Healthcare Facilities",
+    page_title="Hypothesis 2 : Ages ratio - Medical Institutions",
     page_icon="👴",
     layout="wide",
 )
@@ -43,7 +43,7 @@ geo_str_korea = json.load(open('data/korea.json'))
 _lock = RendererAgg.lock
 
 # Title
-st.title("Hypothesis 2 : Ages ratio - Healthcare Facilities")
+st.title("Hypothesis 2 : Ages ratio - Medical Institutions")
 
 st.subheader(
     '''

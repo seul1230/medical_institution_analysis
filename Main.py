@@ -12,7 +12,7 @@ from streamlit_folium import st_folium
 import folium
 
 st.set_page_config(
-    page_title="Population And HealthCare Analysis",
+    page_title="Population And Medical Institutions Analysis",
     page_icon="🏥",
     layout="wide",
 )
@@ -43,7 +43,7 @@ row0_spacer1, row0_1, row0_spacer2, row0_2, row0_spacer3 = st.columns(
 )
 
 # Title
-row0_1.title("Population And HealthCare Analysis")
+row0_1.title("Population And Medical Institutions Analysis")
 
 with row0_2:
     st.write("")

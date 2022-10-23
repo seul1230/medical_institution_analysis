@@ -13,9 +13,10 @@ import folium
 from PIL import Image
 import json
 
+# 가설 3 : 인구수 - 의료기관 개폐업
 st.set_page_config(
-    page_title="Hypothesis 1 : Population - Medical Institutions",
-    page_icon="👥",
+    page_title="Hypothesis 3 : Population - Medical Institutions Opened Closed",
+    page_icon="👴",
     layout="wide",
 )
 
@@ -43,11 +44,11 @@ geo_str_korea = json.load(open('data/korea.json'))
 _lock = RendererAgg.lock
 
 # Title
-st.title("Hypothesis 1 : Population - Medical Institutions")
+st.title("Hypothesis 3 : Population - Medical Institutions Opened Closed")
 
 st.subheader(
     '''
-        **[ 가설 1 ]**  인구 수와 의료기관 분포
+        **[ 가설 2 ]**  연령별 인구 비율과 의료기관 분포
         '''
 )
 
@@ -58,14 +59,34 @@ row1_spacer1, row1_1, row1_spacer2 = st.columns([0.1, 3.2, 0.1])
 with row1_1, _lock:
     st.markdown(
         '''
-        총 인구 수가 적은 행정구역은 의료기관이 적을 것으로 예상한다.\n
-        2022년 6월 기준 영업 중인 **의료기관 현황**과 
-        행정안전부 주민등록 **인구 통계** 데이터를 받아와 전처리하여 분석하였다.
+        고령화가 많이 진행된 지역에 의료기관이 부족할 것으로 예상한다.
+        '''
+    )
+
+    st.markdown(
+        '''
         '''
     )
     st.markdown(
         '''
+        🔍 `중장년 비율(%)`= 40~69세 인구수 / `총인구수`
 
+        🔍 `노년 비율(%)`= 70세 이상 인구수 / `총인구수`
+        
+        '''
+    )
+    st.markdown(
+        '''
+        '''
+    )
+
+    st.markdown(
+        '''
+        각 연령 구분 별로 얻은 인구 비율(%)과 `의료기관수`와의 관계에 대해 알아보자.\n
+        '''
+    )
+    st.markdown(
+        '''
         '''
     )
 
@@ -104,12 +125,11 @@ with analysis_1, _lock:
     st.subheader("Hypothesis Verification")
 
     st.markdown('''
-                **⭕️ 행정구역의 총인구수와 의료기관수는 양의 상관관계가 있다.**
+                **❌ 고령화 비율과 의료기관수는 뚜렷한 상관관계를 보이지 않는다.**
 
-                → 행정구역의 `총인구수`와 `의료기관수`는 0.96 양의 상관관계를 가지기 때문에
-                총인구수가 많을수록 의료 인프라가 잘 마련되어 있다고 볼 수 있다.
+                → 의료기관 수와 중장년 비율, 노년 비율 사이에 유의미한 상관관계는 없었다.
                 ''')
-    st.image(Image.open('img/df_pop_med_corr.png'))
+    st.image(Image.open('img/elder_medical_corr.png'))  # mz_medical_corr
     st.markdown('''
                 ***
                 ''')
@@ -120,32 +140,30 @@ visual_space1, visual_1, visual_space2 = st.columns(
     (0.01, 1, 0.01)
 )
 
+pop_hos_now = data[(data['시도명'] != '서울특별시') & (
+    data['시도명'] != '경기도')].sort_values('노년비율 (%)', ascending=False)
+
+
 with visual_1, _lock:
     st.subheader("Data Visualization")
 
     st.markdown('''
-                👥 **행정구역별 총 인구 수**
+                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (전국)**
                 ''')
-
-    fig, ax = plt.subplots(figsize=(25, 5))
-    sns.lineplot(data=data.sort_values(
-        '의료기관수', ascending=False), x="시도명", y="총인구수")
-
-    ax.set_title("행정구역별 총 인구 수")
-    st.pyplot(fig)
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    data.plot.bar(x="시도명", y="의료기관수",
+                  figsize=(20, 5), rot=0)
+    st.pyplot()
 
     st.markdown('''
+                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
                 ''')
 
-    st.markdown('''
-                🏥 **행정구역별 의료기관 수**
-                ''')
-
-    fig, ax = plt.subplots(figsize=(25, 5))
-    sns.barplot(data=data.sort_values(
-        '의료기관수', ascending=False), x="시도명", y="의료기관수")
-    ax.set_title("행정구역별 의료기관 수")
-    st.pyplot(fig)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    pop_hos_now.plot.bar(x="시도명", y="의료기관수",
+                         figsize=(20, 5), rot=0)
+    st.pyplot()
 
 
 st.markdown('''
@@ -160,29 +178,30 @@ m_space1, m_1, m_space2 = st.columns(
 with m_1, _lock:
     st.subheader("Map Visualization")
 
-# Folium_population
+    # Folium_population
 map_space1, map_1, map_space2, map_2, map_space3 = st.columns(
     (0.01, 1, 0.05, 1, 0.01)
 )
 
 data_sido = data.set_index('시도명')
 
-with map_1, _lock:
-    st.markdown('👥 **행정구역별 총 인구 수 현황**')
+with map_2, _lock:
+    st.markdown('👥 **행정구역별 노년 비율**')
 
-    map_pop = folium.Map(
-        location=[36.5861, 127], zoom_start=6)
+    # 행정구역별 노년비율
+    map_elder = folium.Map(location=[36.5861, 127], zoom_start=6)
+
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['총인구수'],
+                                   data=data_sido['노년비율 (%)'],
                                    columns=[data_sido.index,
-                                            data_sido['총인구수']],
+                                            data_sido['노년비율 (%)']],
                                    fill_color='PuRd',
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
                                    #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
                                    #                                                          labels=True,
                                    #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_pop)
+                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_elder)
 
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
@@ -197,10 +216,10 @@ with map_1, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_pop, width=400, height=400)
+    st_folium(map_elder, width=400, height=400)
 
 
-with map_2, _lock:
+with map_1, _lock:
 
     st.markdown('🏥 **행정구역별 의료기관 수 현황**')
     map_medical = folium.Map(
@@ -233,51 +252,53 @@ st.markdown('''
             ***
             ''')
 
+
 # Further Analysis
 more_spacer1, more_1, more_spacer2 = st.columns((0.01, 1, 0.01))
 
 with more_1, _lock:
     st.subheader('Further Analysis')
+    st.image(Image.open('img/mz_medical_corr.png'))
+    st.markdown('')
     st.markdown(
         '''
-        총인구수가 많을수록(서울, 경기지역) 의료 인프라의 수준이 높다는 것은 접근하기 쉬운 관점이다. 
-        따라서 `의료기관수`가 절대적인 지표라면, 총 인구수에 따라 상대적인 `인구 1만명당 의료기관 수` 
-        지표를 구하여 분석을 해보았다.
+        상관 계수를 구했을 때, 청년 비율과 의료기관 수의 상관관계가 **0.53** 정도로
+        다른 연령층에 비해 높은 양의 상관관계가 있다는 것을 확인했다.
         '''
     )
     st.markdown(
         '''
-        '''
-    )
-    st.markdown(
-        '''
-        
-        🔎 `1만명당의료기관수` = `의료기관수` / `총인구수` * 10000
-        
-        '''
-    )
-    st.markdown(
-        '''
-        '''
-    )
-    st.markdown(
-        '''
-        `의료기관수`가 절대적 차이를 보여주는 지표였다면, 
-        인구 `1만명당의료기관수`는 행정구역의 총 인구수를 기준으로 가공한 지표이기 때문에, 
-        상대적인 차이를 보여주는 지표라고 볼 수 있다.
         '''
     )
 
-st.markdown('''
-            ***
-            ''')
+    st.markdown('''
+                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (전국)**
+                ''')
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    data.plot.bar(x="시도명", y="의료기관수",
+                  figsize=(20, 5), rot=0)
+    st.pyplot()
+    st.markdown(
+        '''
+        '''
+    )
+    st.markdown('''
+                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
+                ''')
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # fig, ax = plt.subplots(figsize=(25, 5))
+    pop_hos_now.plot.bar(x="시도명", y="의료기관수",
+                         figsize=(20, 5), rot=0)
+    st.pyplot()
+
 
 # Map Visualization
 m1_space1, m1_1, m1_space2 = st.columns(
     (0.01, 1, 0.01)
 )
-with m1_1, _lock:
-    st.subheader("Map Visualization")
+# with m1_1, _lock:
+# st.subheader("Map Visualization")
 
 # Folium_population
 map2_space1, map2_1, map2_space2, map2_2, map2_space3 = st.columns(
@@ -315,23 +336,23 @@ with map2_1, _lock:
 
 with map2_2, _lock:
 
-    st.markdown('🔍 **인구 1만 명 당 의료기관 수 현황**')
+    st.markdown('🔍 **행정구역별 청년비율 현황**')
 
     # 행정구역별 인구 1만 명 당 의료기관 수
-    map_10000_medical = folium.Map(
+    map_mz_medical = folium.Map(
         location=[36.5861, 127], zoom_start=6)
 
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['1만명당의료기관수'],
+                                   data=data_sido['청년비율 (%)'],
                                    columns=[data_sido.index,
-                                            data_sido['1만명당의료기관수']],
+                                            data_sido['청년비율 (%)']],
                                    fill_color='PuRd',
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
                                    #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
                                    #                                                          labels=True,
                                    #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_10000_medical)
+                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_mz_medical)
 
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
@@ -346,17 +367,24 @@ with map2_2, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_10000_medical, width=400, height=400)
+    st_folium(map_mz_medical, width=400, height=400)
 
 further_spacer1, further_1, further_spacer2 = st.columns((0.01, 1, 0.01))
 with further_1, _lock:
-    st.markdown('''
-                → `의료기관수`가 **상위권**에 속했던 **인천광역시**, **경상남도**, **경기도**가 
-                인구 `1만명당의료기관수`에서는 **하위권**에 속한다.
-                
-                → **그 중 경기도의 변화가 눈에 띈다.**
-                
-                ''')
+
+    st.subheader('**Conclusion**')
+    st.markdown(
+        '''
+        
+        시각화를 해보니 서울, 경기도의 청년 비율이 높아 연령대별 상관관계 중에 가장 높은 것으로 추정한다. 
+        그러나 경제인구가 밀집된 서울, 경기 지역의 데이터를 제외하고 보면 **청년 연령층과의 상관계수도 유의미하지 않다**고 판단하였다.
+        
+        '''
+    )
+    st.markdown(
+        '''
+        '''
+    )
 
 
 # Footers
