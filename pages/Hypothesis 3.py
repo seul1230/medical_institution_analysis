@@ -116,14 +116,14 @@ analysis_space1, analysis_1, analysis_space2 = st.columns(
 
 with analysis_1, _lock:
     st.subheader("Hypothesis Verification")
-
+    st.image(Image.open('img/infra_info.png'))
+    st.markdown('')
     st.markdown('''
                 **❌ 서울특별시 25개 구의 경우 의료인프라와 문화, 환경, 교육 인프라간에 뚜렷한 상관관계를 보이지 않는다.**
 
                 → 서울시 25개 구를 기준으로 구별로 교통, 문화, 환경, 교육인프라를 비교한 결과,
                 다른 분야의 인프라와 유의미한 상관관계를 가지는 것 또한 총인구수 지표였다.
                 ''')
-    st.image(Image.open('img/elder_medical_corr.png'))  # mz_medical_corr
 
 
 st.markdown('''
