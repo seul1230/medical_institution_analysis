@@ -314,6 +314,19 @@ with map2_2, _lock:
     )
     st_folium(map_gg_non_beauty, width=400, height=400)
 
+analy_space1, analy_1, analy_space2 = st.columns(
+    (0.1, 2, 0.1)
+)
+with analy_1, _lock:
+    st.markdown('''
+                → 서울특별시의 경우 `의료기관수`와 `다른 인프라`의 상관관계는 적다고 볼 수 있고, 
+                **강남구**의 경우 미용목적의료기관이 집중되어있는 등 의료인프라의 상관관계는 다른 인프라의 요인보다 특히 **경제적 요인**이 크다고 할 수 있다. 
+                경기도의 경우도 같은 맥락으로 **수원팔달구**와 **성남**에서 미용목적 의료기관의 비율이 높은 것을 확인할 수 있었다.
+                ''')
+    st.markdown('''
+                ''')
+
+
 st.markdown('''
             ***
             ''')
