@@ -57,40 +57,6 @@ st.subheader(
 # Introduction
 row1_spacer1, row1_1, row1_spacer2 = st.columns([0.1, 3.2, 0.1])
 
-with row1_1, _lock:
-    st.markdown(
-        '''
-        고령화가 많이 진행된 지역에 의료기관이 부족할 것으로 예상한다.
-        '''
-    )
-
-    st.markdown(
-        '''
-        '''
-    )
-    st.markdown(
-        '''
-        🔍 `중장년 비율(%)`= 40~69세 인구수 / `총인구수`
-
-        🔍 `노년 비율(%)`= 70세 이상 인구수 / `총인구수`
-        
-        '''
-    )
-    st.markdown(
-        '''
-        '''
-    )
-
-    st.markdown(
-        '''
-        각 연령 구분 별로 얻은 인구 비율(%)과 `의료기관수`와의 관계에 대해 알아보자.\n
-        '''
-    )
-    st.markdown(
-        '''
-        '''
-    )
-
 
 @ st.cache
 def get_hypo_data(hypo_name):
