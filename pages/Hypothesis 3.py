@@ -15,7 +15,7 @@ import json
 
 # 가설 3 : 인구수 - 의료기관 개폐업
 st.set_page_config(
-    page_title="Hypothesis 3 : Population - Medical Institutions Opened Closed",
+    page_title="Hypothesis 3 : Other Infrastructures - Medical Institutions",
     page_icon="👴",
     layout="wide",
 )
@@ -37,18 +37,18 @@ st_lottie(lottie_json, speed=1, height=300, key="initial")
 
 
 # geo_info
-geo_str_korea = json.load(open('data/korea.json'))
+geo_str_seoul = json.load(open('data/seoul.json'))
 
 # Preparation to display plot
 # matplotlib.use("agg")
 _lock = RendererAgg.lock
 
 # Title
-st.title("Hypothesis 3 : Population - Medical Institutions Opened Closed")
+st.title("Hypothesis 3 : Other Infrastructures - Medical Institutions")
 
 st.subheader(
     '''
-        **[ 가설 2 ]**  연령별 인구 비율과 의료기관 분포
+        **[ 가설 3 ]**  다른 분야의 인프라와 의료기관 수
         '''
 )
 
@@ -59,22 +59,11 @@ row1_spacer1, row1_1, row1_spacer2 = st.columns([0.1, 3.2, 0.1])
 with row1_1, _lock:
     st.markdown(
         '''
-        고령화가 많이 진행된 지역에 의료기관이 부족할 것으로 예상한다.
-        '''
-    )
-
-    st.markdown(
-        '''
-        '''
-    )
-    st.markdown(
-        '''
-        🔍 `중장년 비율(%)`= 40~69세 인구수 / `총인구수`
-
-        🔍 `노년 비율(%)`= 70세 이상 인구수 / `총인구수`
+        의료인프라는 다른 분야의 인프라 수준과 상관관계가 있을 것이다.
         
         '''
     )
+
     st.markdown(
         '''
         '''
@@ -82,11 +71,9 @@ with row1_1, _lock:
 
     st.markdown(
         '''
-        각 연령 구분 별로 얻은 인구 비율(%)과 `의료기관수`와의 관계에 대해 알아보자.\n
-        '''
-    )
-    st.markdown(
-        '''
+        그 중에서도 **서울특별시** 25개구의
+        지하철역 개수, 문화시설 수, 녹지면적, 녹지수, 공공도서관 수 등의 
+        **문화, 환경, 교육, 교통** 분야의 인프라 데이터와 비교하였다. 
         '''
     )
 
@@ -98,8 +85,12 @@ def get_hypo_data(hypo_name):
     return data
 
 
-data = get_hypo_data('df_now_hos')
+data = get_hypo_data('df_seoul_final')
 
+data_seoul_pdata = data.set_index('시군구명')
+subway = get_hypo_data('subway').drop('Unnamed: 0', axis=1)
+
+seoul_subway = subway[subway['시도명'] == '서울특별시']
 
 # Display Data Set
 row3_space1, row3_1, row3_space2 = st.columns(
@@ -109,8 +100,10 @@ row3_space1, row3_1, row3_space2 = st.columns(
 with row3_1, _lock:
     st.subheader("DataSet")
     with st.expander("DataSet 보기 👉"):
-        st.markdown('**연령대별 인구수와 의료기관 수 현황**')
+        st.markdown('**서울특별시 의료기관 수 현황**')
         st.dataframe(data)
+        st.markdown('**지하철역 개수 현황**')
+        st.dataframe(subway)
 
 st.markdown('''
             ***
@@ -125,45 +118,12 @@ with analysis_1, _lock:
     st.subheader("Hypothesis Verification")
 
     st.markdown('''
-                **❌ 고령화 비율과 의료기관수는 뚜렷한 상관관계를 보이지 않는다.**
+                **❌ 서울특별시 25개 구의 경우 의료인프라와 문화, 환경, 교육 인프라간에 뚜렷한 상관관계를 보이지 않는다.**
 
-                → 의료기관 수와 중장년 비율, 노년 비율 사이에 유의미한 상관관계는 없었다.
+                → 서울시 25개 구를 기준으로 구별로 교통, 문화, 환경, 교육인프라를 비교한 결과,
+                다른 분야의 인프라와 유의미한 상관관계를 가지는 것 또한 총인구수 지표였다.
                 ''')
     st.image(Image.open('img/elder_medical_corr.png'))  # mz_medical_corr
-    st.markdown('''
-                ***
-                ''')
-
-
-# Display Visualization
-visual_space1, visual_1, visual_space2 = st.columns(
-    (0.01, 1, 0.01)
-)
-
-pop_hos_now = data[(data['시도명'] != '서울특별시') & (
-    data['시도명'] != '경기도')].sort_values('노년비율 (%)', ascending=False)
-
-
-with visual_1, _lock:
-    st.subheader("Data Visualization")
-
-    st.markdown('''
-                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (전국)**
-                ''')
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    # fig, ax = plt.subplots(figsize=(25, 5))
-    data.plot.bar(x="시도명", y="의료기관수",
-                  figsize=(20, 5), rot=0)
-    st.pyplot()
-
-    st.markdown('''
-                👴🏻 **노년층 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
-                ''')
-
-    # fig, ax = plt.subplots(figsize=(25, 5))
-    pop_hos_now.plot.bar(x="시도명", y="의료기관수",
-                         figsize=(20, 5), rot=0)
-    st.pyplot()
 
 
 st.markdown('''
@@ -178,64 +138,25 @@ m_space1, m_1, m_space2 = st.columns(
 with m_1, _lock:
     st.subheader("Map Visualization")
 
-    # Folium_population
+# Folium_population
 map_space1, map_1, map_space2, map_2, map_space3 = st.columns(
-    (0.01, 1, 0.05, 1, 0.01)
+    (0.1, 1, 0.05, 1, 0.1)
 )
-
-data_sido = data.set_index('시도명')
-
-with map_2, _lock:
-    st.markdown('👥 **행정구역별 노년 비율**')
-
-    # 행정구역별 노년비율
-    map_elder = folium.Map(location=[36.5861, 127], zoom_start=6)
-
-    choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['노년비율 (%)'],
-                                   columns=[data_sido.index,
-                                            data_sido['노년비율 (%)']],
-                                   fill_color='PuRd',
-                                   fill_opacity=0.7,
-                                   line_opacity=0.5,
-                                   #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=True,
-                                   #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_elder)
-
-    choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
-                                       labels=True,
-                                       localize=True,
-                                       sticky=False,
-                                       style="""
-                                    background-color: #F0EFEF;
-                                    border: 2px solid black;
-                                    border-radius: 3px;
-                                    box-shadow: 3px;
-                                    """)
-    )
-    st_folium(map_elder, width=400, height=400)
 
 
 with map_1, _lock:
+    st.markdown('👥 **서울특별시 인구 수 현황**')
 
-    st.markdown('🏥 **행정구역별 의료기관 수 현황**')
-    map_medical = folium.Map(
-        location=[36.5861, 127], zoom_start=6)
-    choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['의료기관수'],
-                                   columns=[data_sido.index,
-                                            data_sido['의료기관수']],
-                                   fill_color='PuRd',
-                                   fill_opacity=0.7,
-                                   line_opacity=0.5,
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_medical)
+    map_seoul_population = folium.Map(location=[37.5665, 127], zoom_start=10)
 
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=data_seoul_pdata["인구수"],
+                                   columns=[data_seoul_pdata.index,
+                                            data_seoul_pdata["인구수"]],
+                                   fill_color="PuRd", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_population)
     choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
                                        labels=True,
                                        localize=True,
                                        sticky=False,
@@ -246,51 +167,112 @@ with map_1, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_medical, width=400, height=400)
+    st_folium(map_seoul_population, width=400, height=400)
+
+
+with map_2, _lock:
+
+    st.markdown('🏥 **서울특별시 의료기관 수 현황**')
+    map_seoul_medical = folium.Map(
+        location=[37.5665, 127], zoom_start=10)
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=data_seoul_pdata['만명당_요양기관_수'],
+                                   columns=[data_seoul_pdata.index,
+                                            data_seoul_pdata['만명당_요양기관_수']],
+                                   fill_color='PuRd',
+                                   fill_opacity=0.7,
+                                   line_opacity=0.5,
+                                   key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_medical)
+
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_seoul_medical, width=400, height=400)
+
+
+# Folium_population
+map2_space1, map2_1, map2_space2, map2_2, map2_space3 = st.columns(
+    (0.1, 1, 0.05, 1, 0.1)
+)
+
+
+with map2_1, _lock:
+    df_seoul_subway = seoul_subway.set_index("시군구명")
+
+    st.markdown('🚆 **서울특별시 지하철역 개수**')
+    map_seoul_subway = folium.Map(location=[37.5665, 127], zoom_start=10)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=df_seoul_subway["역 개수"],
+                                   columns=[df_seoul_subway.index,
+                                            df_seoul_subway["역 개수"]],
+                                   fill_color="Purples", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_subway)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_seoul_subway, width=400, height=400)
+
+
+with map2_2, _lock:
+
+    st.markdown('🏥 **서울특별시 인구 1만 명 당 의료기관 수 현황**')
+    map_seoul_10000 = folium.Map(location=[37.5665, 127], zoom_start=10)
+
+    choropleth = folium.Choropleth(geo_data=geo_str_seoul,
+                                   data=data_seoul_pdata["인구수"],
+                                   columns=[data_seoul_pdata.index,
+                                            data_seoul_pdata["인구수"]],
+                                   fill_color="Purples", key_on='feature.properties.SIG_KOR_NM').add_to(map_seoul_10000)
+    choropleth.geojson.add_child(
+        folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
+                                       aliases=['SIG_KOR_NM'],
+                                       labels=True,
+                                       localize=True,
+                                       sticky=False,
+                                       style="""
+                                    background-color: #F0EFEF;
+                                    border: 2px solid black;
+                                    border-radius: 3px;
+                                    box-shadow: 3px;
+                                    """)
+    )
+    st_folium(map_seoul_10000, width=400, height=400)
+
+analy_space1, analy_1, analy_space2 = st.columns(
+    (0.1, 2, 0.1)
+)
+with analy_1, _lock:
+    st.markdown('''
+                → 서울시 25개 구와 인프라간의 상관관계는 없지만 강남구에는 대부분의 인프라가 몰려있는 것으로 확인할 수 있었다. 
+                특히  교통 인프라중 하나인 지하철 인프라를 시각화 해보았을 때, 의료기관과 유사한 점을 볼 수 있었다. 
+                ''')
+    st.markdown('''
+                ''')
+
 
 st.markdown('''
             ***
             ''')
-
-
-# Further Analysis
-more_spacer1, more_1, more_spacer2 = st.columns((0.01, 1, 0.01))
-
-with more_1, _lock:
-    st.subheader('Further Analysis')
-    st.image(Image.open('img/mz_medical_corr.png'))
-    st.markdown('')
-    st.markdown(
-        '''
-        상관 계수를 구했을 때, 청년 비율과 의료기관 수의 상관관계가 **0.53** 정도로
-        다른 연령층에 비해 높은 양의 상관관계가 있다는 것을 확인했다.
-        '''
-    )
-    st.markdown(
-        '''
-        '''
-    )
-
-    st.markdown('''
-                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (전국)**
-                ''')
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    # fig, ax = plt.subplots(figsize=(25, 5))
-    data.plot.bar(x="시도명", y="의료기관수",
-                  figsize=(20, 5), rot=0)
-    st.pyplot()
-    st.markdown(
-        '''
-        '''
-    )
-    st.markdown('''
-                🧑🏻 **청년 비율 순위에 따른 의료기관 수 (서울, 경기 제외)**
-                ''')
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    # fig, ax = plt.subplots(figsize=(25, 5))
-    pop_hos_now.plot.bar(x="시도명", y="의료기관수",
-                         figsize=(20, 5), rot=0)
-    st.pyplot()
 
 
 # Map Visualization
@@ -300,74 +282,6 @@ m1_space1, m1_1, m1_space2 = st.columns(
 # with m1_1, _lock:
 # st.subheader("Map Visualization")
 
-# Folium_population
-map2_space1, map2_1, map2_space2, map2_2, map2_space3 = st.columns(
-    (0.01, 1, 0.05, 1, 0.01)
-)
-
-with map2_1, _lock:
-    st.markdown('🏥 **행정구역별 의료기관 수 현황**')
-    map_medical_1 = folium.Map(
-        location=[36.5861, 127.1], zoom_start=6)
-    choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['의료기관수'],
-                                   columns=[data_sido.index,
-                                            data_sido['의료기관수']],
-                                   fill_color='PuRd',
-                                   fill_opacity=0.7,
-                                   line_opacity=0.5,
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_medical_1)
-
-    choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
-                                       labels=True,
-                                       localize=True,
-                                       sticky=False,
-                                       style="""
-                                    background-color: #F0EFEF;
-                                    border: 2px solid black;
-                                    border-radius: 3px;
-                                    box-shadow: 3px;
-                                    """)
-    )
-    st_folium(map_medical_1, width=400, height=400)
-
-
-with map2_2, _lock:
-
-    st.markdown('🔍 **행정구역별 청년비율 현황**')
-
-    # 행정구역별 인구 1만 명 당 의료기관 수
-    map_mz_medical = folium.Map(
-        location=[36.5861, 127], zoom_start=6)
-
-    choropleth = folium.Choropleth(geo_data=geo_str_korea,
-                                   data=data_sido['청년비율 (%)'],
-                                   columns=[data_sido.index,
-                                            data_sido['청년비율 (%)']],
-                                   fill_color='PuRd',
-                                   fill_opacity=0.7,
-                                   line_opacity=0.5,
-                                   #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=True,
-                                   #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_mz_medical)
-
-    choropleth.geojson.add_child(
-        folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
-                                       aliases=['CTP_KOR_NM'],
-                                       labels=True,
-                                       localize=True,
-                                       sticky=False,
-                                       style="""
-                                    background-color: #F0EFEF;
-                                    border: 2px solid black;
-                                    border-radius: 3px;
-                                    box-shadow: 3px;
-                                    """)
-    )
-    st_folium(map_mz_medical, width=400, height=400)
 
 further_spacer1, further_1, further_spacer2 = st.columns((0.01, 1, 0.01))
 with further_1, _lock:
@@ -376,8 +290,8 @@ with further_1, _lock:
     st.markdown(
         '''
         
-        시각화를 해보니 서울, 경기도의 청년 비율이 높아 연령대별 상관관계 중에 가장 높은 것으로 추정한다. 
-        그러나 경제인구가 밀집된 서울, 경기 지역의 데이터를 제외하고 보면 **청년 연령층과의 상관계수도 유의미하지 않다**고 판단하였다.
+        서울시 강남구에 의료기관이 제일 많이 집중되어 있는 이유로, 
+        강남에는 미용목적 의료기관이 몰려있기 때문이 아닐까?
         
         '''
     )
@@ -385,6 +299,11 @@ with further_1, _lock:
         '''
         '''
     )
+st.markdown(
+    '''
+    ***
+    '''
+)
 
 
 # Footers
@@ -393,11 +312,12 @@ footer_space1, footer_1, footer_space2 = st.columns(
 )
 
 with footer_1, _lock:
-    st.markdown('''
-                ***
-                ''')
     st.markdown(
-        "**성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민"
+        '''
+        🦁
+
+        **성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민
+        '''
     )
 
     st.markdown(

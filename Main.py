@@ -112,18 +112,23 @@ with row3_1, _lock:
         st.markdown('**미니프로젝트결과물_전국총인구수**')
         st.dataframe(data)
 
-
+st.markdown(
+    '''
+    ***
+    '''
+)
 # Footers
 footer_space1, footer_1, footer_space2 = st.columns(
     (0.01, 1, 0.01)
 )
 
 with footer_1, _lock:
-    st.markdown('''
-                ***
-                ''')
     st.markdown(
-        "**성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민"
+        '''
+        🦁
+
+        **성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민
+        '''
     )
 
     st.markdown(

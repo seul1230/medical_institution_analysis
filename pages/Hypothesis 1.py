@@ -358,6 +358,11 @@ with further_1, _lock:
                 
                 ''')
 
+st.markdown(
+    '''
+    ***
+    '''
+)
 
 # Footers
 footer_space1, footer_1, footer_space2 = st.columns(
@@ -365,11 +370,12 @@ footer_space1, footer_1, footer_space2 = st.columns(
 )
 
 with footer_1, _lock:
-    st.markdown('''
-                ***
-                ''')
     st.markdown(
-        "**성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민"
+        '''
+        🦁
+
+        **성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민
+        '''
     )
 
     st.markdown(
