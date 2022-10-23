@@ -186,7 +186,7 @@ with map1_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -213,7 +213,7 @@ with map1_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -248,7 +248,7 @@ with map_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['name'],
                                        aliases=['name'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -273,7 +273,7 @@ with map_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['name'],
                                        aliases=['name'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""

@@ -150,7 +150,7 @@ with a_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
                                        aliases=['CTP_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -207,7 +207,7 @@ with map_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -236,7 +236,7 @@ with map_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -273,7 +273,7 @@ with map2_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['name'],
                                        aliases=['name'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -302,7 +302,7 @@ with map2_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['name'],
                                        aliases=['name'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""

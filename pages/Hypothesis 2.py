@@ -198,14 +198,14 @@ with map_2, _lock:
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
                                    #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=True,
+                                   #                                                          labels=False,
                                    #                                                          sticky=False),
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_elder)
 
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
                                        aliases=['CTP_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -235,7 +235,7 @@ with map_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
                                        aliases=['CTP_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -320,7 +320,7 @@ with map2_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
                                        aliases=['CTP_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -349,14 +349,14 @@ with map2_2, _lock:
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
                                    #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=True,
+                                   #                                                          labels=False,
                                    #                                                          sticky=False),
                                    key_on='feature.properties.CTP_KOR_NM').add_to(map_mz_medical)
 
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
                                        aliases=['CTP_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""

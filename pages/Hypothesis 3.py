@@ -157,7 +157,7 @@ with map_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -187,7 +187,7 @@ with map_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -220,7 +220,7 @@ with map2_1, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -246,7 +246,7 @@ with map2_2, _lock:
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['SIG_KOR_NM'],
                                        aliases=['SIG_KOR_NM'],
-                                       labels=True,
+                                       labels=False,
                                        localize=True,
                                        sticky=False,
                                        style="""
@@ -289,8 +289,6 @@ with further_1, _lock:
     st.subheader('**Conclusion**')
     st.markdown(
         '''
-        서울특별시 25개 구의 경우 의료인프라와 문화, 환경, 교육 인프라간에 뚜렷한 상관관계를 보이지 않는다.
-        
         의료인프라의 상관관계는 다른 인프라의 요인보다는 
         경제적 요인(지역구 소득수준, 지역구 평균 건물 임대료, 매출액 등등)이 큰 것으로 추정한다.
         
