@@ -45,11 +45,11 @@ geo_str_gg = json.load(open('data/gg.json'))
 _lock = RendererAgg.lock
 
 # Title
-st.title("Hypothesis 2 : Ages ratio - Medical Institutions")
+st.title("Hypothesis 5 : Population - Ages ratio - Opening And Closing")
 
 st.subheader(
     '''
-        **[ 가설 2 ]**  연령별 인구 비율과 의료기관 분포
+        **[ 가설 5 ]**  인구수, 연령별 인구 비율, 그리고 의료기관 분포
         '''
 )
 
