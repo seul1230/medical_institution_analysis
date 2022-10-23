@@ -97,7 +97,8 @@ def get_hypo_data(hypo_name):
     return data
 
 
-data = get_hypo_data('연령별_인구현황(2008_2021)')
+# data = get_hypo_data('연령별_인구현황(2008_2021)')
+data = pd.read_csv('data/연령별_인구현황(2008_2021).csv')
 
 
 # Display Data Set
