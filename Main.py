@@ -107,15 +107,9 @@ row3_space1, row3_1, row3_space2 = st.columns(
 
 with row3_1, _lock:
     st.subheader("DataSet")
-    with st.expander("DataSet 보기 👉"):
-        st.markdown('**미니프로젝트_전국총인구수**')
+    with st.expander("MiniProject Final DataSet 보기 👉"):
+        st.markdown('**미니프로젝트결과물_전국총인구수**')
         st.dataframe(data)
-
-st.markdown(
-    '''
-    
-    '''
-)
 
 
 # Footers
@@ -124,12 +118,14 @@ footer_space1, footer_1, footer_space2 = st.columns(
 )
 
 with footer_1, _lock:
-    st.markdown("***")
+    st.markdown('''
+                ***
+                ''')
     st.markdown(
         "**성장발육엔텐텐** - 이재모, 조예슬, 임혜진, 김영민"
     )
 
     st.markdown(
-        "**멋쟁이사자처럼 AI 스쿨 7기 미드프로젝트** : 2022년 10월 19일 ~ 23일"
+        "**멋쟁이사자처럼 AI 스쿨 7기 미드프로젝트** : 2022.10.19 - 2022.10.23"
 
     )
