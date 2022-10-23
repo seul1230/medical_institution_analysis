@@ -113,6 +113,7 @@ with analysis_1, _lock:
                 ***
                 ''')
 
+
 # Display Visualization
 visual_space1, visual_1, visual_space2 = st.columns(
     (0.01, 1, 0.01)
@@ -132,10 +133,23 @@ with analysis_1, _lock:
     ax.set_title("행정구역별 총 인구 수")
     st.pyplot(fig)
 
+    st.markdown('''
+                ''')
+
+    st.markdown('''
+                🏥 행정구역별 의료기관 수
+                ''')
+
+    fig, ax = plt.subplots(figsize=(25, 5))
+    sns.barplot(data=data.sort_values(
+        '의료기관수', ascending=False), x="시도명", y="의료기관수")
+    ax.set_title("행정구역별 의료기관 수")
+    st.pyplot(fig)
+
     # Folium_medical
     data_sido = data.set_index('시도명')
     map_medical = folium.Map(
-        location=[37.5536067, 126.9674308], zoom_start=6.3, width=300, height=300)
+        location=[37.5536067, 126.9674308], zoom_start=6.3)
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
                                    data=data_sido['총인구수'],
                                    columns=[data_sido.index,
@@ -161,24 +175,11 @@ with analysis_1, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_medical)
-
-    st.markdown('''
-                ''')
-
-    st.markdown('''
-                🏥 행정구역별 의료기관 수
-                ''')
-
-    fig, ax = plt.subplots(figsize=(25, 5))
-    sns.barplot(data=data.sort_values(
-        '의료기관수', ascending=False), x="시도명", y="의료기관수")
-    ax.set_title("행정구역별 의료기관 수")
-    st.pyplot(fig)
+    st_folium(map_medical, width=500, height=500)
 
     # Folium_medical
     # data_sido = data.set_index('시도명')
-    map_medical = folium.Map(
+    map_pop = folium.Map(
         location=[37.5536067, 126.9674308], zoom_start=6.3)
     choropleth = folium.Choropleth(geo_data=geo_str_korea,
                                    data=data_sido['의료기관수'],
@@ -187,10 +188,7 @@ with analysis_1, _lock:
                                    fill_color='PuRd',
                                    fill_opacity=0.7,
                                    line_opacity=0.5,
-                                   #                   tooltip=folium.features.GeoJsonTooltip(fields=['neighbourhood_cleansed', 'price'],
-                                   #                                                          labels=True,
-                                   #                                                          sticky=False),
-                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_medical)
+                                   key_on='feature.properties.CTP_KOR_NM').add_to(map_pop)
 
     choropleth.geojson.add_child(
         folium.features.GeoJsonTooltip(fields=['CTP_KOR_NM'],
@@ -205,7 +203,7 @@ with analysis_1, _lock:
                                     box-shadow: 3px;
                                     """)
     )
-    st_folium(map_medical)
+    st_folium(map_pop, width=500, height=500)
 
 
 # Footers
