@@ -112,11 +112,30 @@ with row3_1, _lock:
         st.markdown('**미니프로젝트결과물_전국총인구수**')
         st.dataframe(data)
 
+st.markdown('')
+st.markdown('')
+hypo_space1, hypo_1, hypo_space2 = st.columns(
+    (0.01, 1, 0.01)
+)
+
+with hypo_1, _lock:
+    st.subheader("Hypothesis")
+    st.markdown('''
+            1.  총인구수가 적은 행정구역은 현존하는 의료기관수가 부족할 것으로 예상한다
+            2.  고령화가 많이 진행된 지역에 현존하는 의료기관이 부족할 것이다
+            3.  의료기관수는 다른분야(문화, 환경, 교육)의 인프라와도 상관관계가 있을 것이다
+            4.  서울시 강남구에 의료기관이 제일 많이 집중되어 있는 이유는 강남에는 미용목적 의료기관이 몰려있기 때문일 것이다.
+            5.  연도별 의료기관 개폐업수와 총인구수, 연령층 비율은 상관관계가 있을 것이다.
+    
+                ''')
+
 st.markdown(
     '''
     ***
     '''
 )
+
+
 # Footers
 footer_space1, footer_1, footer_space2 = st.columns(
     (0.01, 1, 0.01)
