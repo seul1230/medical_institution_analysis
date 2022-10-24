@@ -10,6 +10,7 @@ import requests
 from streamlit_lottie import st_lottie
 from streamlit_folium import st_folium
 import folium
+from PIL import Image
 
 st.set_page_config(
     page_title="Population And Medical Institutions Analysis",
@@ -61,6 +62,13 @@ with row1_1:
         **고령화, 그리고 코로나 19 이후 의료 인프라**
         '''
     )
+# img_space1, img_1, img_space2, img_2, img_space3 = st.columns(
+#     (0.1, 1, 0.05, 1, 0.1)
+# )
+
+row2_spacer1, row2_1, row2_spacer2 = st.columns([0.1, 3.2, 0.1])
+
+with row2_1:
     st.markdown(
         '''
         
@@ -73,21 +81,16 @@ with row1_1:
         이에 따라 우리 조는 미니프로젝트에서 분석하였던 **총 인구수**(2008 - 2021)를 바탕으로 의료기관 데이터에 접근하고자 한다.
         '''
     )
-    st.markdown(
-        '''
-        우선 지역 별 **인구 수**에 따른 **현재 운영 중인 의료기관 수**(2022.06 기준)를 분석한다. 
-        목표는 지역 별 인구 수에 따른 의료기관 비율을 비교 분석하고 도표와 지도를 통해 시각화하는 것이다. 
-        인구수에 따른 **인프라 격차**가 발생할 것이라는 가설을 검증하고 현재 의료 인프라가 부족한 지역을 찾는다. 
-        더하여, 의료시설 개업과 폐업 데이터를 분석하여 앞으로의 인프라 격차를 개선시킬 수 있는 방안을 모색해 본다.
-        
-        
-        '''
-    )
-    st.markdown(
-        '''
-        
-        '''
-    )
+
+img_space1, img_1, img_space2 = st.columns(
+    (0.1, 1, 0.1)
+)
+with img_1, _lock:
+    st.image(Image.open('img/background.png'))
+#     st.image(Image.open('img/background_1.png'))
+# with img_2, _lock:
+#     st.image(Image.open('img/background_2.png'))
+#     st.image(Image.open('img/background_3.png'))
 
 
 @st.cache
@@ -107,6 +110,22 @@ row3_space1, row3_1, row3_space2 = st.columns(
 )
 
 with row3_1, _lock:
+    st.markdown(
+        '''
+        우선 지역 별 **인구 수**에 따른 **현재 운영 중인 의료기관 수**(2022.06 기준)를 분석한다. 
+        목표는 지역 별 인구 수에 따른 의료기관 비율을 비교 분석하고 도표와 지도를 통해 시각화하는 것이다. 
+        인구수에 따른 **인프라 격차**가 발생할 것이라는 가설을 검증하고 현재 의료 인프라가 부족한 지역을 찾는다. 
+        더하여, 의료시설 개업과 폐업 데이터를 분석하여 앞으로의 인프라 격차를 개선시킬 수 있는 방안을 모색해 본다.
+        
+        
+        '''
+    )
+
+    st.markdown(
+        '''
+        
+        '''
+    )
     st.subheader("DataSet")
     with st.expander("MiniProject Final DataSet 보기 👉"):
         st.markdown('**미니프로젝트결과물_전국총인구수**')
