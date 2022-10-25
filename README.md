@@ -72,25 +72,23 @@ s
 
 
 - Folium
-[https://python-visualization.github.io/folium/](https://python-visualization.github.io/folium/)
+  
+    [https://python-visualization.github.io/folium/](https://python-visualization.github.io/folium/)
 - px.choropleth (동적 map visualization)
+  
     [https://plotly.com/python/choropleth-maps/](https://plotly.com/python/choropleth-maps/)
     
 - ****World Population EDA With World Map Visualization****
     
     <https://www.kaggle.com/code/prathameshgadekar/world-population-eda-with-world-map-visualization>
 
-- **의료취약지 발생 이유'는 "병원운영 어렵고 기본 인프라 부족탓"**
+- **['의료취약지 발생 이유'는 "병원운영 어렵고 기본 인프라 부족탓"](http://www.medical-tribune.co.kr/news/articleView.html?idxno=93953)**
     
-    ['의료취약지 발생 이유'는 "병원운영 어렵고 기본 인프라 부족탓"](http://www.medical-tribune.co.kr/news/articleView.html?idxno=93953)
-    
-
-- **지방은 이미 '무의촌화' 진행 중...의사 · 시설 모두 부족**
-  [지방은 이미 '무의촌화' 진행 중...의사 · 시설 모두 부족](https://news.sbs.co.kr/news/endPage.do?news_id=N1006862236)
-
-
     
 
-**서울시 자치구 인프라 현황 자료**
+- **[지방은 이미 '무의촌화' 진행 중...의사 · 시설 모두 부족](https://news.sbs.co.kr/news/endPage.do?news_id=N1006862236)**
+  
 
-[당신이 '강남 3구'에 끌리는 이유](https://m.khan.co.kr/economy/economy-general/article/201810230600035#c2b)
+- **서울시 자치구 인프라 현황 자료**
+
+    [당신이 '강남 3구'에 끌리는 이유](https://m.khan.co.kr/economy/economy-general/article/201810230600035#c2b)
