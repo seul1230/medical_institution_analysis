@@ -1,7 +1,11 @@
 # Project : 의료기관 현황 및 개폐업 분석
 
 <br/>
+
+<a href='https://seul1230-medical-institution-analysis-main-1ufm7a.streamlit.app/'>
 <p align="center"><img src = "img/lottie_img.png" width = "400"></p>
+</a>
+
 <br/>
 
 ### **I. 주제**
